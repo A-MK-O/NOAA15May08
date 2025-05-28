@@ -30,39 +30,20 @@
       position: absolute;
       left: 0;
       width: 100%;
-      height: 1px; /* made slightly smaller */
-      background-color: white;
+      height: 1px;
+      background-color: black;
       pointer-events: none;
       display: none;
-      box-shadow: 0 0 10px rgba(173, 216, 230, 0.7), 0 0 20px rgba(173, 216, 230, 0.4);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 0, 0, 0.4);
     }
 
     .glitch-dot {
       position: absolute;
-      background-color: white;
+      background-color: black;
       width: 1px;
       height: 1px;
       pointer-events: none;
       opacity: 0.9;
-    }
-
-    #noise {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      opacity: 0.08;
-      background: url('https://via.placeholder.com/200x200') repeat;
-      background-size: 200px 200px;
-      display: none;
-      animation: noiseMove 1s linear infinite;
-    }
-
-    @keyframes noiseMove {
-      from { background-position: 0 0; }
-      to { background-position: 50px 50px; }
     }
 
     audio {
@@ -88,7 +69,6 @@
   <div id="container">
     <img id="scan-image" src="photo.png" alt="Satellite Pass">
     <div id="scan-line"></div>
-    <div id="noise"></div>
   </div>
 
   <div id="error"></div>
@@ -98,7 +78,6 @@
     const scanLine = document.getElementById('scan-line');
     const image = document.getElementById('scan-image');
     const container = document.getElementById('container');
-    const noise = document.getElementById('noise');
     const error = document.getElementById('error');
 
     let imageHeight = 0;
@@ -107,7 +86,6 @@
     image.onload = () => {
       imageHeight = image.offsetHeight;
       scanLine.style.display = 'block';
-      noise.style.display = 'none';
     };
 
     image.onerror = () => {
@@ -116,7 +94,7 @@
 
     function updateScanLine() {
       const speed = Math.random() * 0.5 + 0.5;
-      const height = 1 + Math.random() * 4; // keeping it thinner overall
+      const height = 1 + Math.random() * 4;
       const jitter = (Math.random() - 0.5) * 2;
 
       scanY += speed;
@@ -153,18 +131,15 @@
     audio.addEventListener('play', () => {
       scanY = 0;
       scanLine.style.display = 'block';
-      noise.style.display = 'block';
-      const timestamp = new Date().getTime();
-      noise.style.backgroundImage = `url('https://via.placeholder.com/200x200?${timestamp}')`;
       requestAnimationFrame(glitchyScan);
     });
 
     audio.addEventListener('pause', () => {
-      noise.style.display = 'none';
+      // Do nothing
     });
 
     audio.addEventListener('ended', () => {
-      noise.style.display = 'none';
+      // Do nothing
     });
 
     window.onerror = function (msg, src, lineno, colno, errorObj) {
